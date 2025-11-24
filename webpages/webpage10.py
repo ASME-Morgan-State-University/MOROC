@@ -108,4 +108,4 @@ def websocket_listener():
 
 if __name__ == '__main__':
     threading.Thread(target=websocket_listener, daemon=True).start()
-    app.run(debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=5010, debug=False, use_reloader=False)

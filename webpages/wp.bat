@@ -1,0 +1,11 @@
+@echo off
+start cmd /k "python webpage1.py"
+start cmd /k "python webpage2.py"
+start cmd /k "python webpage3.py"
+start cmd /k "python webpage4.py"
+start cmd /k "python webpage5.py"
+start cmd /k "python webpage6.py"
+start cmd /k "python webpage7.py"
+start cmd /k "python webpage8.py"
+start cmd /k "python webpage9.py"
+start cmd /k "python webpage10.py"

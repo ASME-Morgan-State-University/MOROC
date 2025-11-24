@@ -1,0 +1,11 @@
+@echo off
+start cmd /k "python websk1.py"
+start cmd /k "python websk2.py"
+start cmd /k "python websk3.py"
+start cmd /k "python websk4.py"
+start cmd /k "python websk5.py"
+start cmd /k "python websk6.py"
+start cmd /k "python websk7.py"
+start cmd /k "python websk8.py"
+start cmd /k "python websk9.py"
+start cmd /k "python websk10.py"
