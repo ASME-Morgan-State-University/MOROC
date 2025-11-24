@@ -95,7 +95,7 @@ def get_data():
 # WebSocket listener in background thread
 def websocket_listener():
     async def listen():
-        uri = "ws://localhost:5001"
+        uri = "ws://192.168.1.101:80"
         async with websockets.connect(uri) as websocket:
             while True:
                 msg = await websocket.recv()
