@@ -2,7 +2,7 @@
 
 Adafruit_AHTX0 aht;
 
-void setup() {
+void Tempsetup() {
   Serial.begin(115200);
   if (!aht.begin()) {
     Serial.println("Could not find AHT20 sensor, check wiring!");

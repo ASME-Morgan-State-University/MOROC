@@ -4,6 +4,11 @@ Servo myServo;
 
 int servoPin = 4;  
 int pos = 0;   // global position tracker
+void servoSetup() {
+  // myServo.setPeriodHertz(50);    // standard 50 hz servo
+  myServo.attach(servoPin, 500, 2400); // attaches the servo on pin 4 to the servo object
+  // myServo.write(0);              // initial position
+}
 
 void armOut() {
   if (pos < 90) {
