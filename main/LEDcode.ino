@@ -10,14 +10,14 @@ void ledsetup() {
   strip.show(); // Initialize all pixels to 'off'
 }
 
-void lights_on() { //All lights on as the color white
+void lights_on() { 
   strip.clear();
     for (int pixel = 0; pixel < NUM_PIXELS; pixel++) {
     strip.setPixelColor(pixel, strip.Color(255, 255, 255));
     }
     strip.show();
     delay(1000);
-  }
+}
 
 void lights_off() {// All lights off
   strip.clear();
@@ -38,12 +38,11 @@ void lights_strobe() {
 }
 
 void lights_rainbow_setup() { //Rainbow mulit-pattern lights
-  // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
-  // Any other board, you can remove this part (but no harm leaving it):
-#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
-  clock_prescale_set(clock_div_1);
-#endif
-  // END of Trinket-specific code.
+ 
+  #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+    clock_prescale_set(clock_div_1);
+  #endif
+    // END of Trinket-specific code.
 
 
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)

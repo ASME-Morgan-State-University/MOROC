@@ -1,4 +1,3 @@
-
 #include <WiFi.h>
 #include <WebSocketsServer.h>
 #include <esp_system.h>  // for esp_random()
@@ -7,11 +6,9 @@
 const char* ssid     = "NETGEAR37";
 const char* password = "luckyocean160";
 
-IPAddress staticIP(192, 168, 1, 101); // ESP32's desired static IP
+IPAddress staticIP(192, 168, 1, 101); // ESP32's desired static IP with group Number
 IPAddress gateway (192, 168, 1, 1);   // gateway IP
 IPAddress subnet  (255, 255, 255, 0); // subnet mask
-// Optional: DNS servers
-// IPAddress dns1(192, 168, 1, 1), dns2(8, 8, 8, 8);
 
 /* ==== WebSocket server ==== */
 const uint16_t WS_PORT  = 80;
@@ -24,9 +21,9 @@ uint32_t lastSendMs = 0;
 /* ==== Simple client registry (optional) ==== */
 size_t clientCount = 0;
 
-void onWsEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
+void onWsEvent(uint8_t num, int type, uint8_t * payload, size_t length) {
   switch (type) {
-    case WStype_CONNECTED: {
+    case 0: { // WStype_CONNECTED
       IPAddress ip = wsServer.remoteIP(num);
       clientCount++;
       Serial.printf("[WS] Client #%u connected from %s. Total: %u\n",
@@ -36,12 +33,13 @@ void onWsEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
       break;
     }
 
-    case WStype_DISCONNECTED:
+    case 1: { // WStype_DISCONNECTED
       if (clientCount > 0) clientCount--;
       Serial.printf("[WS] Client #%u disconnected. Total: %u\n", num, clientCount);
       break;
+    }
 
-    case WStype_TEXT: {
+    case 2: { // WStype_TEXT
       String cmd = String((const char*)payload, length);
       Serial.printf("[WS] Text from #%u: %s\n", num, cmd.c_str());
       if (cmd == "rng" || cmd == "sample" || cmd == "{\"type\":\"rng\"}") {
@@ -52,16 +50,19 @@ void onWsEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
       break;
     }
 
-    case WStype_PING:
+    case 9: { // WStype_PING
       Serial.printf("[WS] Ping from #%u\n", num);
       break;
+    }
 
-    case WStype_PONG:
+    case 10: { // WStype_PONG
       Serial.printf("[WS] Pong from #%u\n", num);
       break;
+    }
 
-    default:
+    default: {
       break;
+    }
   }
 }
 
@@ -97,34 +98,24 @@ void connectWifi() {
   Serial.println(WiFi.localIP());
 }
 
-void setup() {
-  Serial.begin(115200);
-  delay(100);
-
-  randomSeed(esp_random()); // good hardware seed
-
+void networkSetup() {
   connectWifi();
-
   // Start WebSocket server
   wsServer.begin();
   wsServer.onEvent(onWsEvent);
-  // Serial.printf("RNG WebSocket server listening at ws://%s:%u\n",
-  //               WiFi.localIP().toString().c_str(), WS_PORT);
+  Serial.printf("RNG WebSocket server listening at ws://%s:%u\n",WiFi.localIP().toString().c_str(), WS_PORT);
 }
 
-void loop() {
-  // Pump server events
-  wsServer.loop();
+// void networkLoop() {
+//   wsServer.loop();
 
-  // Broadcast RNG at a fixed interval to all clients
-  uint32_t now = millis();
-  if (now - lastSendMs >= SEND_INTERVAL_MS) {
-    lastSendMs = now;
-
-    uint32_t value = (uint32_t)esp_random() % 101;
-    String msg = String(value);
-
-    wsServer.broadcastTXT(msg);
-    Serial.printf("[WS] Broadcast RNG: %u\n", value);
-  }
-}
+//   // Periodically send random number to all clients
+//   uint32_t now = millis();
+//   if (now - lastSendMs >= SEND_INTERVAL_MS) {
+//     lastSendMs = now;
+//     uint32_t value = (uint32_t)esp_random() % 101;
+//     String msg = String(value);
+//     wsServer.broadcastTXT(msg);
+//     Serial.printf("[WS] Broadcast RNG value: %s\n", msg.c_str());
+//   }
+// }

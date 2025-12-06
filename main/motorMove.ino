@@ -1,8 +1,8 @@
-int ML1 = 18; //Motor Left Front - low
-int ML2 = 19; // - high
+int ML1 = 18; //Motor Left
+int ML2 = 19; //
 
-int MR1 = 26;//Motor right Back - low
-int MR2 = 25;// - high 
+int MR1 = 26;//Motor right 
+int MR2 = 25;// 
 
 int motorSpeed = 128; // Global speed control (0-255)
 int native_stop= 500; // Native Stop time build into each function
@@ -80,18 +80,3 @@ void left(int ms_time){
   stop(native_stop);
 
 }
-
-// void setup(){
-//   Serial.begin(115200);
-//   motorSetup();
-//   Serial.println("Motor Ready");
-
-// }
-
-// void loop(){
-//   forward(1000);
-//   backward(1000);
-//   right(2000);
-//   left(2000);
-//   stop(5000);
-// }
